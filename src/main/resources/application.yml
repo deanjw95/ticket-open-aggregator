@@ -1,4 +1,22 @@
-server:
-  servlet:
-    encoding:
-      force-response: true
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/ticket-open-aggregator
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    jpa:
+      hibernate:
+        database: H2
+        dialect: org.hibernate.dialect.H2Dialect
+        ddl-auto: none
+      properties:
+        hibernate:
+          format_sql: true
+#            show_sql: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: trace

@@ -14,6 +14,12 @@ import java.time.LocalDateTime;
 @Slf4j
 public class TicketCrawler {
 
+    private final TicketRepository ticketRepository;
+
+    public TicketCrawler(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
+    }
+
     public void interParkTicketCrawling() throws IOException {
         for (int i = 1; i < 5; i++) {
             String url = "https://ticket.interpark.com/webzine/paper/TPNoticeList_iFrame.asp?bbsno=34&pageno=" + i + "&KindOfGoods=TICKET&Genre=&sort=opendate&stext=";
@@ -33,6 +39,7 @@ public class TicketCrawler {
                         LocalDateTime dateTime = getLocalDateTime(countElement);
 
                         Ticket ticket = new Ticket(id, title, bookingUrl, dateTime, count);
+                        ticketRepository.save(ticket);
                         log.info("ticket = {}", ticket);
                     }
                 }
