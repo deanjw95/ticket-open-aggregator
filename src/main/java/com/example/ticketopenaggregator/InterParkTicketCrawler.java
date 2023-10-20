@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 
 @Component
 @Slf4j
-public class TicketCrawler {
+public class InterParkTicketCrawler {
 
     private final TicketRepository ticketRepository;
 
-    public TicketCrawler(TicketRepository ticketRepository) {
+    public InterParkTicketCrawler(TicketRepository ticketRepository) {
         this.ticketRepository = ticketRepository;
     }
 
@@ -27,7 +27,7 @@ public class TicketCrawler {
 
             for (Element countElement : ticketsDoc.select("tbody .count")) {
                 int count = Integer.parseInt(countElement.text());
-                if (count > 400) {
+                if (count > 1000) {
                     Elements subject = countElement.parent().select(".subject a");
                     String detailUrl = "https://ticket.interpark.com/webzine/paper/" + subject.attr("href");
                     Document ticketDetailDoc = Jsoup.connect(detailUrl).get();
@@ -38,7 +38,7 @@ public class TicketCrawler {
                         String id = bookingUrl.substring(bookingUrl.indexOf("GoodsCode=") + 10);
                         LocalDateTime dateTime = getLocalDateTime(countElement);
 
-                        Ticket ticket = new Ticket(id, title, bookingUrl, dateTime, count);
+                        Ticket ticket = new Ticket(id, title, "interpark", bookingUrl, dateTime, count);
                         ticketRepository.save(ticket);
                         log.info("ticket = {}", ticket);
                     }

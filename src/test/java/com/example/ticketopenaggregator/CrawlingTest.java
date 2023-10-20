@@ -46,7 +46,7 @@ public class CrawlingTest {
         doc.select(".txt_review").forEach(element -> {
             // , 없애기
             if (Integer.parseInt(element.text().replace(",", "")) > 1000) {
-                String date = element.parent().parent().select(".date").text();
+                String date = element.parent().parent().parent().select(".date").text();
                 Elements subject = element.parent().parent().select(".link_consert a");
                 String detailUrl = "https://ticket.melon.com/csoon/" + subject.attr("href").substring(2);
 

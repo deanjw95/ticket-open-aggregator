@@ -20,15 +20,18 @@ public class Ticket {
     @Column
     private String title;
     @Column
+    private String site;
+    @Column
     private String url;
     @Column
     private LocalDateTime date;
     @Column
     private Integer count;
 
-    public Ticket(String id, String text, String detailUrl, LocalDateTime dateTime, int count) {
+    public Ticket(String id, String text, String site, String detailUrl, LocalDateTime dateTime, int count) {
         this.id = id;
         this.title = text;
+        this.site = site;
         this.url = detailUrl;
         this.date = dateTime;
         this.count = count;

@@ -1,22 +1,27 @@
 package com.example.ticketopenaggregator;
 
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class CrawlingScheduler {
 
-    private final TicketCrawler ticketCrawler;
+    private final InterParkTicketCrawler interParkTicketCrawler;
+    private final MelonTicketCrawler melonTicketCrawler;
 
-    public CrawlingScheduler(TicketCrawler ticketCrawler) {
-        this.ticketCrawler = ticketCrawler;
+    public CrawlingScheduler(InterParkTicketCrawler interParkTicketCrawler, MelonTicketCrawler melonTicketCrawler) {
+        this.interParkTicketCrawler = interParkTicketCrawler;
+        this.melonTicketCrawler = melonTicketCrawler;
     }
 
     @PostConstruct
     public void init() throws IOException {
-        System.out.println("CrawlingScheduler.init");
-        ticketCrawler.interParkTicketCrawling();
+        log.info("CrawlingScheduler init");
+        interParkTicketCrawler.interParkTicketCrawling();
+        melonTicketCrawler.melonTicketCrawling();
     }
 }
