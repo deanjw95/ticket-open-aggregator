@@ -57,5 +57,38 @@ public class CrawlingTest {
         });
     }
 
+    @Test
+    public void testYes24TicketCrawling() throws IOException {
+        String url = "http://ticket.yes24.com/New/Notice/Ajax/axList.aspx";
+        int page = 1;
+        int size = 20;
+        int order = 2;
+        String searchType = "All";
+
+        Document doc = Jsoup.connect(url)
+                .data("page", String.valueOf(page))
+                .data("size", String.valueOf(size))
+                .data("order", String.valueOf(order))
+                .data("searchType", searchType)
+                .post();
+
+        // tr의 3번째 td
+        doc.select("tbody tr").forEach(element -> {
+            try {
+                if (Integer.parseInt(element.child(3).text().replace(",", "")) > 1000) {
+                    String date = element.child(2).text();
+                    Elements subject = element.child(1).select("a");
+                    String detailUrl = "http://ticket.yes24.com" + subject.attr("href");
+
+                    System.out.println("element = " + element.child(2).text());
+                    System.out.println("date = " + date);
+                    System.out.println("subject = " + detailUrl);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("element.child(3).text() = " + element.child(3).text());
+            }
+        });
+    }
+
 
 }
