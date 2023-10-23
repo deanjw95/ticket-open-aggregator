@@ -72,7 +72,6 @@ public class CrawlingTest {
                 .data("searchType", searchType)
                 .post();
 
-        // tr의 3번째 td
         doc.select("tbody tr").forEach(element -> {
             try {
                 if (Integer.parseInt(element.child(3).text().replace(",", "")) > 1000) {

@@ -12,10 +12,12 @@ public class CrawlingScheduler {
 
     private final InterParkTicketCrawler interParkTicketCrawler;
     private final MelonTicketCrawler melonTicketCrawler;
+    private final Yes24TicketCrawler yes24TicketCrawler;
 
-    public CrawlingScheduler(InterParkTicketCrawler interParkTicketCrawler, MelonTicketCrawler melonTicketCrawler) {
+    public CrawlingScheduler(InterParkTicketCrawler interParkTicketCrawler, MelonTicketCrawler melonTicketCrawler, Yes24TicketCrawler yes24TicketCrawler) {
         this.interParkTicketCrawler = interParkTicketCrawler;
         this.melonTicketCrawler = melonTicketCrawler;
+        this.yes24TicketCrawler = yes24TicketCrawler;
     }
 
     @PostConstruct
@@ -23,5 +25,6 @@ public class CrawlingScheduler {
         log.info("CrawlingScheduler init");
         interParkTicketCrawler.interParkTicketCrawling();
         melonTicketCrawler.melonTicketCrawling();
+        yes24TicketCrawler.yes24TicketCrawling();
     }
 }
