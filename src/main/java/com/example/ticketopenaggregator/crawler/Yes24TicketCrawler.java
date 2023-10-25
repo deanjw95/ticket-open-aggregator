@@ -1,5 +1,7 @@
-package com.example.ticketopenaggregator;
+package com.example.ticketopenaggregator.crawler;
 
+import com.example.ticketopenaggregator.Ticket;
+import com.example.ticketopenaggregator.TicketRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

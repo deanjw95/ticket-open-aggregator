@@ -1,5 +1,7 @@
-package com.example.ticketopenaggregator;
+package com.example.ticketopenaggregator.crawler;
 
+import com.example.ticketopenaggregator.Ticket;
+import com.example.ticketopenaggregator.TicketRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,7 +54,11 @@ public class MelonTicketCrawler {
                         if (matcher.find()) {
                             String id = matcher.group(1);
                             bookingUrl = "https://ticket.melon.com/performance/index.htm?prodId=" + id;
-                            LocalDateTime dateTime = getLocalDateTime(countElement);
+                            Elements dates = ticketDetailDoc.select(".txt_date");
+                            LocalDateTime dateTime;
+                            if (dates.size() == 3)
+                                dateTime = getLocalDateTime(dates.get(2));
+                            else dateTime = getLocalDateTime(dates.get(1));
 
                             Ticket ticket = new Ticket(id, title, "melon", bookingUrl, dateTime, count);
                             ticketRepository.save(ticket);
@@ -66,10 +74,10 @@ public class MelonTicketCrawler {
         return !ticketDetailDoc.select(".box_link").isEmpty();
     }
 
-    private LocalDateTime getLocalDateTime(Element count) {
-        String date = count.parent().parent().parent().select(".date").text();
-        date = date.substring(0, date.indexOf("(")) + date.substring(date.indexOf(")") + 1);
-        return stringToLocalDateTime(date);
+    private LocalDateTime getLocalDateTime(Element dateText) {
+        String dateStr = dateText.text().substring(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 (E) HH:mm", Locale.KOREA);
+        return LocalDateTime.parse(dateStr, formatter);
     }
 
     private LocalDateTime stringToLocalDateTime(String dateString) {
