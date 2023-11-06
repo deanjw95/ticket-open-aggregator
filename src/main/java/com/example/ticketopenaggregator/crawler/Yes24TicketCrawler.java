@@ -80,8 +80,12 @@ public class Yes24TicketCrawler {
 
     private LocalDateTime getLocalDateTime(Element element) {
         String date = element.child(2).text();
-        date = date.substring(0, date.indexOf("(")) + date.substring(date.indexOf(")") + 1);
-        return stringToLocalDateTime(date);
+        if (date.equals("추후공지")) {
+            return null;
+        } else {
+            date = date.substring(0, date.indexOf("(")) + date.substring(date.indexOf(")") + 1);
+            return stringToLocalDateTime(date);
+        }
     }
 
     private LocalDateTime stringToLocalDateTime(String dateString) {

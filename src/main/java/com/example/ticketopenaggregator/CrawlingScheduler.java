@@ -32,6 +32,6 @@ public class CrawlingScheduler {
         melonTicketCrawler.melonTicketCrawling();
         yes24TicketCrawler.yes24TicketCrawling();
 
-        smsSender.send();
+//        smsSender.send();
     }
 }

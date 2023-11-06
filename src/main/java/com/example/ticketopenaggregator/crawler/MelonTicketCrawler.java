@@ -76,7 +76,7 @@ public class MelonTicketCrawler {
 
     private LocalDateTime getLocalDateTime(Element dateText) {
         String dateStr = dateText.text().substring(1);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 (E) HH:mm", Locale.KOREA);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 (E) HH:mm", Locale.KOREA);
         return LocalDateTime.parse(dateStr, formatter);
     }
 
