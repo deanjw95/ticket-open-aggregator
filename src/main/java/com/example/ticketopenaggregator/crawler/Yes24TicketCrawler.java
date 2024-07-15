@@ -41,33 +41,34 @@ public class Yes24TicketCrawler {
 
             for (Element element : ticketsDoc.select("tbody tr")) {
                 try {
-                    int count = Integer.parseInt(element.child(3).text().replace(",", ""));
-                    if (count > 1000) {
-                        Elements subject = element.child(1).select("a");
-                        String detailUrl = "http://ticket.yes24.com/New/Notice/Ajax/axRead.aspx";
-                        LocalDateTime dateTime = getLocalDateTime(element);
-                        Document ticketDetailDoc = Jsoup.connect(detailUrl)
-                                .data("bId", subject.attr("href").substring(4))
-                                .post();
+                    if (element.childNodeSize() > 1) {
+                        int count = Integer.parseInt(element.child(3).text().replace(",", ""));
+                        if (count > 1000) {
+                            Elements subject = element.child(1).select("a");
+                            String detailUrl = "http://ticket.yes24.com/New/Notice/Ajax/axRead.aspx";
+                            LocalDateTime dateTime = getLocalDateTime(element);
+                            Document ticketDetailDoc = Jsoup.connect(detailUrl)
+                                    .data("bId", subject.attr("href").substring(4))
+                                    .post();
 
-                        if (hasBookingBtn(ticketDetailDoc)) {
-                            String title = ticketDetailDoc.select(".noti-vt-tit").text();
-                            String href = ticketDetailDoc.select(".noti-vt-btns:contains(상세보기) a").attr("href");
+                            if (hasBookingBtn(ticketDetailDoc)) {
+                                String title = ticketDetailDoc.select(".noti-vt-tit").text();
+                                String href = ticketDetailDoc.select(".noti-vt-btns:contains(상세보기) a").attr("href");
 
-                            Pattern pattern = Pattern.compile("(\\d+)");
-                            Matcher matcher = pattern.matcher(href);
-                            if (matcher.find()) {
-                                String id = matcher.group(1);
-                                String bookingUrl = "http://ticket.yes24.com/Perf/" + id;
+                                Pattern pattern = Pattern.compile("(\\d+)");
+                                Matcher matcher = pattern.matcher(href);
+                                if (matcher.find()) {
+                                    String id = matcher.group(1);
+                                    String bookingUrl = "http://ticket.yes24.com/Perf/" + id;
 
-                                Ticket ticket = new Ticket(id, title, "yes24", bookingUrl, dateTime, count);
-                                ticketRepository.save(ticket);
-                                log.info("ticket = {}", ticket);
+                                    Ticket ticket = new Ticket(id, title, "yes24", bookingUrl, dateTime, count);
+                                    ticketRepository.save(ticket);
+                                    log.info("ticket = {}", ticket);
+                                }
                             }
                         }
                     }
                 } catch (NumberFormatException e) {
-
                 }
             }
         }
